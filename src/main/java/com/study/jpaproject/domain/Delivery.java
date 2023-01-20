@@ -13,7 +13,7 @@ public class Delivery {
 	@Column(name = "delivery_id")
 	private Long id;
 	
-	@OneToOne(mappedBy = "delivery")
+	@OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY)
 	private Order order;
 	
 	@Embedded
@@ -22,4 +22,5 @@ public class Delivery {
 	// EnumType.ORDINAL을 사용할 경우 숫자로 들어감 중간에 상태가 추가되면 뒤로 밀리는 현상 발생
 	@Enumerated(EnumType.STRING)
 	private DeliveryStatus status;
+	
 }
