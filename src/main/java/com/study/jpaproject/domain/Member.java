@@ -15,6 +15,8 @@ public class Member {
 	@Column(name = "member_id")
 	private Long id;
 	
+	// service에서 중복 이름을 검증하긴 하지만 멀티 스레드를 고려하여 유니크 조건 추가
+	@Column(unique = true)
 	private String name;
 	
 	@Embedded

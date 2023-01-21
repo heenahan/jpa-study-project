@@ -19,8 +19,8 @@ public class Order {
 	@JoinColumn(name = "member_id") // 연관관계 주인임을 선언 -> fk를 가진 엔티티자 주인이 됨
 	private Member member;
 	
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //
-	private List<OrderItem> orderItems = new ArrayList<>();
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	private List<OrderItem> orderItems = new ArrayList<>(); // 컬렉션 필드에서 초기화 -> 1. null 예외 안전 2. 내장 컬렉션 변경 X
 	
 	@OneToOne(fetch = LAZY, cascade = CascadeType.ALL) // 두 인스턴스 모두 persist할 필요 없음
 	@JoinColumn(name = "delivery_id") // 시스템 상 주문을 통해 배달을 보니 order에 fk 존재
