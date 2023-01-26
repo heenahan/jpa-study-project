@@ -1,4 +1,4 @@
-spring:
+spring: # 운영 환경
   datasource:
     url: jdbc:h2:tcp://localhost/~/jpa-project
     username: sa

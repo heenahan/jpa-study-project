@@ -31,7 +31,7 @@ public class MemberRepository {
 	
 	public List<Member> findByName(String name) {
 		// :변수
-		return em.createQuery("select * from Member m  where m.name = :name", Member.class)
+		return em.createQuery("select m from Member m  where m.name = :name", Member.class)
 				       .setParameter("name", name)
 				.getResultList();
 	}

@@ -1,0 +1,5 @@
+spring: # 격리된 테스트 환경 만들어줌.
+# 스프링부트는 datasource 설정이 없으면 메모리 DB 사용
+# create-drop : 테이블 drop해서 자원 정리
+logging.level:
+  org.hibernate.SQL: debug

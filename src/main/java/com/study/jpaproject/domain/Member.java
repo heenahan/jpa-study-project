@@ -25,12 +25,4 @@ public class Member {
 	@OneToMany(mappedBy = "member") // order 테이블의 member 컬럼에 매핑
 	private List<Order> orders = new ArrayList<>();
 	
-	protected Member() {} // JPA Entity 기본 생성자 필요
-	
-	public Member(Long id, String name, Address address, List<Order> orders) {
-		this.id = id;
-		this.name = name;
-		this.address = address;
-		this.orders = orders;
-	}
 }
