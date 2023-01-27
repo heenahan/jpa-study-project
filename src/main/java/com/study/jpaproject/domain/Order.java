@@ -1,6 +1,8 @@
 package com.study.jpaproject.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,6 +15,7 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Table(name = "orders")
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // 누군가가 생성자 메서드가 아닌 new로 생성하는 것을 막음
 public class Order {
 
 	@Id @GeneratedValue
@@ -26,7 +29,13 @@ public class Order {
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderItem> orderItems = new ArrayList<>(); // 컬렉션 필드에서 초기화 -> 1. null 예외 안전 2. 내장 컬렉션 변경 X
 	
-	@OneToOne(fetch = LAZY, cascade = CascadeType.ALL) // 두 인스턴스 모두 persist할 필요 없음
+	/**
+	 * CascadeType.ALL ->
+	 * order이 persist되면 orderItems, delivery 모두 자동으로 persist
+	 * 따라서 두 인스턴스 모두 persist할 필요 없음. 지울 때도 마찬가지.
+	 * ※ 언제 사용? 같이 persist해야 하는 라이프 사이클이거나 다른 엔티티가 참조하지 않을 때
+	 */
+	@OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "delivery_id") // 시스템 상 주문을 통해 배달을 보니 order에 fk 존재
 	private Delivery delivery;
 
@@ -65,7 +74,7 @@ public class Order {
 		return order;
 	}
 	
-	// 비즈니스 로직
+	// 비즈니스 로직 -> 핵심적인 비즈니스 로직이 엔티티 내에 존재, 객체지향적
 	
 	public void cancle() {
 		// 배달 완료된 상태이면 주문 취소 불가능
