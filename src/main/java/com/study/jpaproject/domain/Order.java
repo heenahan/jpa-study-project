@@ -1,5 +1,8 @@
 package com.study.jpaproject.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +12,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Table(name = "orders")
+@Getter @Setter
 public class Order {
 
 	@Id @GeneratedValue
@@ -37,7 +41,7 @@ public class Order {
 		member.getOrders().add(this);
 	}
 	
-	public void setOrderItems(OrderItem orderItem) {
+	public void addOrderItems(OrderItem orderItem) {
 		orderItems.add(orderItem);
 		orderItem.setOrder(this);
 	}
@@ -47,4 +51,42 @@ public class Order {
 		delivery.setOrder(this);
 	}
 	
+	// 생성 메서드 -> Order처럼 복잡한 생성의 경우 따로 생성자 메서드 정의 //
+	
+	public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+		Order order = new Order();
+		order.setMember(member);
+		order.setDelivery(delivery);
+		for (OrderItem orderItem : orderItems) {
+			order.addOrderItems(orderItem);
+		}
+		order.setStatus(OrderStatus.ORDER);
+		order.setOrderDate(LocalDateTime.now());
+		return order;
+	}
+	
+	// 비즈니스 로직
+	
+	public void cancle() {
+		// 배달 완료된 상태이면 주문 취소 불가능
+		if (delivery.getStatus() == DeliveryStatus.COMP) {
+			throw new IllegalStateException("이미 배달이 완료되어 주문을 취소할 수 없습니다.");
+		}
+		this.status = OrderStatus.CANCLE;
+		for (OrderItem orderItem : orderItems) {
+			orderItem.cancle(); // 재고 복구
+		}
+	}
+	
+	// 조회 로직
+	/**
+	 * 전체 주문 가격 조회
+	 */
+	public int getTotalPrice() {
+		int totalPrice = 0;
+		for (OrderItem orderItem : orderItems) {
+			totalPrice += orderItem.getTotalPrice();
+		}
+		return totalPrice;
+	}
 }
