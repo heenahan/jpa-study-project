@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header" />
 <style>
-    .fieldError {
-        border-color: #bd2130; }
+    .fieldError { border-color: #bd2130; }
 </style>
 <body>
     <div class="container">
@@ -16,11 +15,11 @@
                     Getter Setter을 통한 접근 -> 프로퍼티 접근법
                     th:field를 사용하면 객체 필드와 동일한 id와 name을 갖는다.
                 -->
+                <!--
+                    name 필드에 에러 있으면 css 실행 및 에러 메시지를 가져와 렌더링한다
+                    참고로 name 필드에 에러 발생하면 나머지 입력은 객체에 저장되고 다시 html로 return.
+                -->
                 <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요"
-                       <!--
-                        name 필드에 에러 있으면 css 실행 및 에러 메시지를 가져와 렌더링한다
-                        참고로 name 필드에 에러 발생하면 나머지 입력은 객체에 저장되고 다시 html로 return.
-                       -->
                        th:class="${#fields.hasErrors('name')} ? 'form-control fieldError' : 'form-control'">
                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect date</p>
             </div>

@@ -65,11 +65,13 @@ public class ItemController {
 		form.setAuthor(item.getAuthor());
 		form.setIsbn(item.getIsbn());
 		
+		model.addAttribute("items", item);
+		
 		return "items/updateItemForm";
 	}
 	
-	@PostMapping("item/{itemId}/edit")
-	public String updateItem(@PathVariable("itemId") Long itemId, @ModelAttribute("item") BookForm bookForm) {
+	@PostMapping("/items/{itemId}/edit")
+	public String updateItem(@PathVariable("itemId") Long itemId, @ModelAttribute("items") BookForm bookForm) {
 //		Book book = new Book();
 		// id가 존재하므로 db에 한 번 저장된 값이다.
 		// 따라서 준영속 상태이다. 준영속이란 영속성 컨텍스트(JPA)가 더이상 관리하지 않는 엔티티이다.
