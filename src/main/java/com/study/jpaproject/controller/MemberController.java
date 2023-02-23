@@ -2,6 +2,7 @@ package com.study.jpaproject.controller;
 
 import com.study.jpaproject.domain.Address;
 import com.study.jpaproject.domain.Member;
+import com.study.jpaproject.dto.MemberForm;
 import com.study.jpaproject.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

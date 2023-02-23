@@ -1,4 +1,4 @@
-package com.study.jpaproject.controller;
+package com.study.jpaproject.dto;
 
 import lombok.Getter;
 import lombok.Setter;
