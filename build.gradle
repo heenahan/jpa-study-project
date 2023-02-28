@@ -24,6 +24,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-devtools'
+    // 버전을 입력 안하면 현재 스프링부트 버전에 최적화된 버전을 다운받는다.
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
 
     implementation 'com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:1.8.1'
 

@@ -7,7 +7,7 @@ spring: # 운영 환경
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true

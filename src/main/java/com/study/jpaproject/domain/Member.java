@@ -23,7 +23,7 @@ public class Member {
 	@Embedded
 	private Address address;
 	
-//	@JsonIgnore 엔티티가 프레젠테이션을 위한 기능이 들어옴
+	@JsonIgnore //엔티티가 프레젠테이션을 위한 기능이 들어옴
 	@OneToMany(mappedBy = "member") // order 테이블의 member 컬럼에 매핑
 	private List<Order> orders = new ArrayList<>();
 	

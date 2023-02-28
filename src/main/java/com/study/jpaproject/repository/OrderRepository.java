@@ -2,6 +2,7 @@ package com.study.jpaproject.repository;
 
 import com.study.jpaproject.domain.Order;
 import com.study.jpaproject.dto.OrderSearch;
+import com.study.jpaproject.dto.SimpleOrderQueryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+// 순수한 엔티티만 조회하는 Repository
 public class OrderRepository {
 
 	private final EntityManager em;
@@ -22,6 +24,15 @@ public class OrderRepository {
 	
 	public Order findOne(Long id) {
 		return em.find(Order.class, id);
+	}
+	
+	public List<Order> findAllWithMemberDelivery() {
+		// LAZY로 두고 원하는 엔티티만 fetch join!!
+		return em.createQuery(
+				"select o from Order o"
+				+ " join fetch o.member m"
+				+ " join fetch o.delivery d", Order.class
+		).getResultList();
 	}
 	
 	// 주문 검색 -> JPQL 쿼리, JPA Criteria 번거로움
