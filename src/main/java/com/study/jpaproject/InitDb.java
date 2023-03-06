@@ -29,6 +29,7 @@ public class InitDb {
 	public void init() {
 		initService.doInit1();
 		initService.doInit2();
+		initService.doInit3();
 	}
 	
 	@Component
@@ -46,16 +47,16 @@ public class InitDb {
 			Book book2 = createBook("JPA2 Book", 15000, 99);
 			em.persist(book1);
 			em.persist(book2);
-			
-			OrderItem orderItem1 = OrderItem.createOrderItem(book1, book1.getPrice(), 2);
-			OrderItem orderItem2 = OrderItem.createOrderItem(book2, book2.getPrice(), 4);
-			em.persist(orderItem1);
-			em.persist(orderItem2);
-			
+	
 			Delivery delivery = new Delivery();
 			delivery.setAddress(member.getAddress());
-			Order order = Order.createOrder(member, delivery, orderItem1, orderItem2);
-			em.persist(order);
+			// Legacy 전략 확인을 위해 데이터 많이 넣음
+			for (int i = 0; i < 15; i++) {
+				OrderItem orderItem = OrderItem.createOrderItem(book1, book1.getPrice(), 1);
+				
+				Order order = Order.createOrder(member, delivery, orderItem);
+				em.persist(order);
+			}
 		}
 		
 		public void doInit2() {
@@ -74,6 +75,13 @@ public class InitDb {
 			delivery.setAddress(member.getAddress());
 			Order order = Order.createOrder(member, delivery, orderItem1, orderItem2);
 			em.persist(order);
+		}
+		
+		public void doInit3() {
+			Member member = new Member();
+			member.setName("memberC");
+			member.setAddress(new Address("충북", "천안", "234567"));
+			em.persist(member);
 		}
 		
 		private Member getMember(String name, String city, String street, String zipCode) {

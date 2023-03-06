@@ -31,8 +31,8 @@ public class OrderRepository {
 		return em.createQuery(
 				"select o from Order o"
 				+ " join fetch o.member m"
-				+ " join fetch o.delivery d", Order.class
-		).getResultList();
+				+ " join fetch o.delivery d", Order.class)
+				.getResultList();
 	}
 	
 	// 주문 검색 -> JPQL 쿼리, JPA Criteria 번거로움
@@ -69,4 +69,28 @@ public class OrderRepository {
 		return query.getResultList();
 	}
 	
+	public List<Order> findWithItems() {
+		return em.createQuery(
+				/**
+				 * db는 모든 컬럼의 값이 같아야 동일한 행이라고 판단한다.
+				 * 하지만 영속성 컨텍스트는 id가 같다면 동일한 엔티티라고 판단한다.
+				 * 따라서 distinct로 엔티티 중복을 걸러준다.
+				 */
+				"select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+						" join fetch o.orderItems oi" +
+						// OrderItem에 item도 가져온다.
+                        " join fetch oi.item i", Order.class ).getResultList();
+	}
+	
+	public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+		return em.createQuery(
+				"select o from Order o" +
+						" join fetch o.member m" +
+						" join fetch o.delivery d", Order.class)
+				       .setFirstResult(offset)
+				       .setMaxResults(limit)
+				       .getResultList();
+	}
 }
