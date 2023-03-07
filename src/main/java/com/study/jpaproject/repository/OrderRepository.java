@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-// 순수한 엔티티만 조회하는 Repository
+// 순수한 엔티티만 조회하는 Repository, 비즈니스 로직 수행을 위한 repository
 public class OrderRepository {
 
 	private final EntityManager em;

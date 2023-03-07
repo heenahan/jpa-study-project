@@ -47,16 +47,15 @@ public class InitDb {
 			Book book2 = createBook("JPA2 Book", 15000, 99);
 			em.persist(book1);
 			em.persist(book2);
+			
+			OrderItem orderItem1 = OrderItem.createOrderItem(book1, book1.getPrice(), 2);
+			OrderItem orderItem2 = OrderItem.createOrderItem(book2, book2.getPrice(), 4);
 	
 			Delivery delivery = new Delivery();
 			delivery.setAddress(member.getAddress());
-			// Legacy 전략 확인을 위해 데이터 많이 넣음
-			for (int i = 0; i < 15; i++) {
-				OrderItem orderItem = OrderItem.createOrderItem(book1, book1.getPrice(), 1);
-				
-				Order order = Order.createOrder(member, delivery, orderItem);
-				em.persist(order);
-			}
+			
+			Order order = Order.createOrder(member, delivery, orderItem1, orderItem2);
+			em.persist(order);
 		}
 		
 		public void doInit2() {
