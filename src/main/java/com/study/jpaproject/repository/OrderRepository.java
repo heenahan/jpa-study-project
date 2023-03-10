@@ -1,8 +1,14 @@
 package com.study.jpaproject.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.study.jpaproject.domain.Order;
+import com.study.jpaproject.domain.OrderStatus;
+import com.study.jpaproject.domain.QMember;
+import com.study.jpaproject.domain.QOrder;
 import com.study.jpaproject.dto.OrderSearch;
 import com.study.jpaproject.dto.SimpleOrderQueryDto;
+import com.study.jpaproject.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -67,6 +73,30 @@ public class OrderRepository {
 			query = query.setParameter("name", orderSearch.getMemberName());
 		}
 		return query.getResultList();
+	}
+	// compileQuerydsl 실행
+	public List<Order> findAllWithQueryDsl(OrderSearch orderSearch) {
+		JPAQueryFactory query = new JPAQueryFactory(em);
+		QOrder order = QOrder.order;
+		QMember member = QMember.member;
+		// 컴파일 시점에 빠르게 오류 잡힘
+		return query
+				.select(order)
+		        .from(order)
+		        .join(order.member, member)
+		        .where(nameLike(orderSearch.getMemberName()), statusEq(orderSearch.getOrderStatus()))
+		        .limit(1000)
+				.fetch();
+	}
+	
+	private BooleanExpression nameLike(String name) {
+		if (!StringUtils.hasText(name)) return null;
+		else return QMember.member.name.like(name);
+	}
+	
+	private BooleanExpression statusEq(OrderStatus orderStatus) {
+		if (orderStatus == null) return null;
+		else return QOrder.order.status.eq(orderStatus);
 	}
 	
 	public List<Order> findWithItems() {

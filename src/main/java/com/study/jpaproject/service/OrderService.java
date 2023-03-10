@@ -4,7 +4,7 @@ import com.study.jpaproject.domain.*;
 import com.study.jpaproject.domain.item.Item;
 import com.study.jpaproject.dto.OrderSearch;
 import com.study.jpaproject.repository.ItemRepository;
-import com.study.jpaproject.repository.MemberRepository;
+import com.study.jpaproject.repository.MemberRepositoryOld;
 import com.study.jpaproject.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.List;
 public class OrderService {
 	
 	private final OrderRepository orderRepository;
-	private final MemberRepository memberRepository;
+	private final MemberRepositoryOld memberRepository;
 	private final ItemRepository itemRepository;
 	
 	/**
