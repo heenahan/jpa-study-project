@@ -4,12 +4,10 @@ import com.study.jpaproject.domain.Address;
 import com.study.jpaproject.domain.Order;
 import com.study.jpaproject.domain.OrderItem;
 import com.study.jpaproject.domain.OrderStatus;
-import com.study.jpaproject.dto.OrderFlatDto;
-import com.study.jpaproject.dto.OrderItemQueryDto;
-import com.study.jpaproject.dto.OrderQueryDto;
-import com.study.jpaproject.dto.OrderSearch;
+import com.study.jpaproject.dto.*;
 import com.study.jpaproject.repository.OrderRepository;
 import com.study.jpaproject.repository.order.queryRepository.OrderQueryRepository;
+import com.study.jpaproject.service.query.OrderQueryService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,15 +38,13 @@ public class OrderAPIController {
 		}
 		return orders;
 	}
+	
+	private final OrderQueryService orderQueryService;
+	
 	// entity -> dto
 	@GetMapping("/api/v2/orders")
 	public List<OrderDto> ordersV2() {
-		List<Order> orders = orderRepository.findAll(new OrderSearch());
-		List<OrderDto> orderDtos = orders.stream()
-										.map(OrderDto::new)
-										.collect(toList());
-		
-		return orderDtos;
+		return orderQueryService.findAll();
 	}
 	
 	@GetMapping("/api/v3/orders")
@@ -117,44 +113,6 @@ public class OrderAPIController {
 					return orderQueryDto;
 				})
 				.collect(toList());
-	}
-	
-	@Data
-	static class OrderDto {
-		private Long orderId;
-		private String name;
-		private LocalDateTime orderDate;
-		private OrderStatus orderStatus;
-		private Address address;
-		// 참고로 Dto안에 엔티티를 넣는 것도 안된다. 엔티티와 의존을 모두 끊어야 한다!
-		private List<OrderItemDto> orderItemDto;
-		
-		public OrderDto(Order o) {
-			orderId = o.getId();
-			name = o.getMember().getName();
-			orderDate = o.getOrderDate();
-			orderStatus = o.getStatus();
-			address = o.getDelivery().getAddress();
-			// 컬렉션 내의 엔티티 모두 강제 초기화 해준다.
-			orderItemDto = o.getOrderItems()
-							.stream()
-			                .map(OrderItemDto::new)
-							.collect(toList());
-		}
-	}
-	
-	@Data
-	static class OrderItemDto {
-		
-		private String itemName;
-		private int totalPrice;
-		private int count;
-		
-		public OrderItemDto(OrderItem o) {
-			itemName = o.getItem().getName();
-			totalPrice = o.getTotalPrice();
-			count = o.getCount();
-		}
 	}
 	
 }
